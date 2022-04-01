@@ -42,7 +42,7 @@ var core;
             this.EmailAddress = propertyArray[2];
         }
         toString() {
-            return `Full Name: ${this.FullName}\nContact Number: ${this.ContactNumber}\nEmail Address: ${this.EmailAddress}`;
+            return `Full Name: ${this.FullName} \nContact Number: ${this.ContactNumber} \nEmail Address: ${this.EmailAddress}`;
         }
     }
     core.Contact = Contact;

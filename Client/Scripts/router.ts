@@ -12,7 +12,7 @@ namespace core
             return this.m_activeLink;
         }
 
-        set ActiveLink(link: string)
+        set ActiveLink(link:string)
         {
             this.m_activeLink = link;
         }
@@ -22,7 +22,7 @@ namespace core
             return this.m_linkData;
         }
 
-        set LinkData(data: string)
+        set LinkData(data:string)
         {
             this.m_linkData = data;
         }
@@ -133,3 +133,4 @@ else
 {
     router.ActiveLink = "404"; // file not found
 }
+

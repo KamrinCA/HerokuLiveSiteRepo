@@ -11,12 +11,12 @@
             "/edit"
         ];
     
-        if (protected_routes.indexOf(location.pathname) > -1)
+        if(protected_routes.indexOf(location.pathname) > -1)
         {
             // check if user is logged in
             if(!sessionStorage.getItem("user"))
             {
-                // if not, change the active link to "login"
+                // if not...change the active link to "login"
                 location.href = "/login";
             }
         }
@@ -25,7 +25,6 @@
     function DisplayHome(): void
     {
         console.log("Home Page");
-
         $("#AboutUsButton").on("click", () => 
         {
             location.href = "/about";
@@ -63,11 +62,11 @@
      */
     function AddContact(fullName: string, contactNumber: string, emailAddress: string)
     {
-        let contact: core.Contact = new core.Contact(fullName, contactNumber, emailAddress);
+        let contact = new core.Contact(fullName, contactNumber, emailAddress);
         if(contact.serialize())
         {
             let key = contact.FullName.substring(0, 1) + Date.now();
-
+                
             localStorage.setItem(key, contact.serialize());
         }
     }
@@ -86,7 +85,6 @@
         
         $("#" + input_field_ID).on("blur", function()
         {
-            // TODO: Fix the data type
             let inputFieldText: string = $(this).val() as string;
 
             if(!regular_expression.test(inputFieldText))
@@ -130,6 +128,7 @@
                 let fullName = document.forms[0].fullName.value as string;
                 let contactNumber = document.forms[0].contactNumber.value as string;
                 let emailAddress = document.forms[0].emailAddress.value as string;
+
                 AddContact(fullName, contactNumber, emailAddress);
             }
         });
@@ -139,60 +138,14 @@
     {
         console.log("Contact-List Page");
 
-        if(localStorage.length > 0)
+        $("a.delete").on("click", function(event)
         {
-            let contactList = document.getElementById("contactList") as HTMLElement;
-
-            let data = ""; // data container -> add deserialized data from the localStorage
-
-            let keys = Object.keys(localStorage); // returns a string array of keys
-
-            let index = 1; // counts how many keys
-
-            // for every key in the keys array (collection), loop
-            for (const key of keys) 
+            if(!confirm("Are you sure?"))
             {
-                let contactData = localStorage.getItem(key); // get localStorage data value related to the key
-
-                let contact = new core.Contact(); // create a new empty contact object
-                contact.deserialize(contactData as string);
-
-                // inject a repeatable row into the contactList
-                data += `<tr>
-                <th scope="row" class="text-center">${index}</th>
-                <td>${contact.FullName}</td>
-                <td>${contact.ContactNumber}</td>
-                <td>${contact.EmailAddress}</td>
-                <td class="text-center"><button value="${key}" class="btn btn-primary btn-sm edit"><i class="fas fa-edit fa-sm"></i> Edit</button></td>
-                <td class="text-center"><button value="${key}" class="btn btn-danger btn-sm delete"><i class="fas fa-trash-alt fa-sm"></i> Delete</button></td>
-                </tr>
-                `;
-
-                index++;
-            }
-
-            contactList.innerHTML = data;
-
-            $("button.delete").on("click", function()
-            {
-                if(confirm("Are you sure?"))
-                {
-                    localStorage.removeItem($(this).val() as string);
-                }
-
-                // "refresh" after deleting
+                event.preventDefault();
+                // refresh after deleting
                 location.href = "/contact-list";
-            });
-
-            $("button.edit").on("click", function()
-            {
-                location.href = "/edit#" + $(this).val() as string;
-            });
-        }
-
-        $("#addButton").on("click",() =>
-        {
-            location.href = "/edit#add";
+            }
         });
     }
 
@@ -201,75 +154,8 @@
         console.log("Edit Page");
 
         ContactFormValidation();
-
-        let page = location.hash.substring(1);
-
-        switch(page)
-        {
-            case "add":
-                {
-                    $("main>h1").text("Add Contact");
-
-                    $("#editButton").html(`<i class="fas fa-plus-circle fa-lg"></i> Add`);
-                
-                    $("#editButton").on("click", (event)=>
-                    {
-                        event.preventDefault();
-                        
-                        let fullName = document.forms[0].fullName.value as string;
-                        let contactNumber = document.forms[0].contactNumber.value as string;
-                        let emailAddress = document.forms[0].emailAddress.value as string;
-
-                        // Add Contact
-                        AddContact(fullName, contactNumber, emailAddress);
-
-                        // "refresh" the contact-list page
-                        location.href = "/contact-list";
-                    });
-
-                    $("#cancelButton").on("click", () =>
-                    {
-                        location.href = "/contact-list";
-                    });
-                }
-                break;
-            default:
-                {
-                    // get the contact  info from localStorage
-                    let contact = new core.Contact();
-                    contact.deserialize(localStorage.getItem(page) as string);
-
-                    // display the contact info in the edit form
-                    $("#fullName").val(contact.FullName);
-                    $("#contactNumber").val(contact.ContactNumber);
-                    $("#emailAddress").val(contact.EmailAddress);
-
-                    // when editButton is pressed - update the contact
-                    $("#editButton").on("click", (event)=>
-                    {
-                        event.preventDefault();
-
-                        // get any changes from the form
-                        contact.FullName = $("#fullName").val() as string;
-                        contact.ContactNumber = $("#contactNumber").val() as string;
-                        contact.EmailAddress = $("#emailAddress").val() as string;
-
-                        // replace the item in localStorage
-                        localStorage.setItem(page, contact.serialize());
-
-                        // return to the contact-list
-                        location.href = "/contact-list";
-                    });
-
-                    $("#cancelButton").on("click", () =>
-                    {
-                        location.href = "/contact-list";
-                    });
-                }
-                break;
-        }
     }
-    
+
     function CheckLogin()
     {
         // if user is logged in, then...
@@ -285,11 +171,11 @@
                 // perform logout
                 sessionStorage.clear();
 
-                // Swap out the logout link for login
+                // swap out the logout link for login
                 $("#login").html(
                     `<a class="nav-link" href="/login"><i class="fas fa-sign-in-alt"></i> Login</a>`
                 );
-                
+
                 // redirect back to login page
                 location.href = "/login";
             });
@@ -378,7 +264,7 @@
 
         CheckLogin();
 
-        switch (page_id) 
+        switch (page_id)
         {
           case "home": 
             DisplayHome();
@@ -386,21 +272,22 @@
           case "about": 
             DisplayAboutPage();
             break;
-          case "projects": 
+          case "projects":
             DisplayProjectsPage();
             break;
           case "services":
             DisplayServicesPage();
             break;
           case "contact-list": 
-            AuthGuard();
             DisplayContactListPage();
             break;
           case "contact": 
             DisplayContactPage();
             break;
           case "edit": 
-            AuthGuard();
+            DisplayEditPage();
+            break;
+          case "add": 
             DisplayEditPage();
             break;
           case "login": 
