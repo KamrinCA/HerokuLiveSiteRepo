@@ -14,6 +14,14 @@ import passport from 'passport';            // authentication
 import passportLocal from 'passport-local'; // authentication strategy
 import flash from 'connect-flash';          // auth messaging
 
+// Modules for jwt support
+import cors from 'cors';
+import passportJWT from 'passport-jwt';
+
+// Define JWT aliases
+let JWTStrategy = passportJWT.Strategy;
+let ExtractJWT = passportJWT.ExtractJwt;
+
 // authentication objects
 let localStrategy = passportLocal.Strategy; // alias
 // import User Model
@@ -21,7 +29,8 @@ import User from '../Models/user';
 
 // App Configuration
 import indexRouter from '../Routes/index';
-import usersRouter from '../Routes/users';
+import authRouter from '../Routes/auth';
+import contactListRouter from '../Routes/contact-list';
 
 const app = express();
 
@@ -51,6 +60,8 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, '../../Client')));
 app.use(express.static(path.join(__dirname, '../../node_modules')));
 
+app.use(cors()); // Adds CORS to the config
+
 // setup express session
 app.use(session({
   secret: DBConfig.SessionSecret,
@@ -72,8 +83,33 @@ passport.use(User.createStrategy());
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
+// Setup JWT Options
+let jwtOptions = 
+{
+  jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
+  secretOrKey: DBConfig.SessionSecret
+}
+
+// Setup JWT Strategy
+let strategy = new JWTStrategy(jwtOptions, function(jwt_payload, done)
+{
+  User.findById(jwt_payload.id)
+    .then(user => 
+      {
+        return done(null, user);
+      })
+      .catch(err => 
+        {
+          return done(err, false);
+        });
+});
+
+passport.use(strategy);
+
+// Implement routing
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use('/', authRouter);
+app.use('/', contactListRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) 
