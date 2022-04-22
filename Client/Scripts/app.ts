@@ -1,26 +1,15 @@
+/* Authors: Chris Lapp-Benjamin (100802074) & Kamrin Aubin (100792839)
+ * Date Completed: April 21, 2022
+ * Description: app.ts file. Minor deletions made here, relatively the same
+ *
+ */
+
 // IIFE -- Immediately Invoked Function Express
 // AKA anonymous self-executing function
 
 "use strict";
 (function()
 {
-    function AuthGuard(): void
-    {
-        let protected_routes = [
-            "/contact-list",
-            "/edit"
-        ];
-    
-        if(protected_routes.indexOf(location.pathname) > -1)
-        {
-            // check if user is logged in
-            if(!sessionStorage.getItem("user"))
-            {
-                // if not...change the active link to "login"
-                location.href = "/login";
-            }
-        }
-    }
 
     function DisplayHome(): void
     {
@@ -29,13 +18,6 @@
         {
             location.href = "/about";
         });
-
-        $("main").append(`<p id="MainParagraph" class="mt-3">This is the Main Paragraph</p>`);
-
-        $("main").append(`
-        <article>
-            <p id="ArticleParagraph" class="mt-3">This is the Article Paragraph</p>
-            </article>`);
     }
 
     function DisplayAboutPage(): void

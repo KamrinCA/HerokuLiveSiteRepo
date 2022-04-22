@@ -1,9 +1,9 @@
 {
-  "name": "ice-13",
+  "name": "lab-4",
   "version": "1.0.0",
-  "description": "Repo for WEBD6201-W2022 ICE-13",
+  "description": "Repo for WEBD6201-W2022 LAB4",
   "main": "server.js",
-  "author": "Kamrin Aubin",
+  "author": "Kamrin Aubin & Chris Lapp-Benjamin",
   "license": "MIT",
   "scripts": {
     "start": "node server.js"

@@ -1,3 +1,9 @@
+/* Authors: Chris Lapp-Benjamin (100802074) & Kamrin Aubin (100792839)
+ * Date Completed: April 21, 2022
+ * Description: auth.ts file. Controller for handling the authentication processes and displays
+ *
+ */
+
 import express, {Request, Response, NextFunction} from 'express';
 
 import passport from 'passport';
@@ -6,8 +12,10 @@ import User from '../Models/user';
 import { GenerateToken, UserDisplayName } from '../Util/index';
 
 // Display Functions
+// Displays login page
 export function DisplayLoginPage(req: Request, res: Response, next: NextFunction): void
 {
+    // Checks if there is no one logged in
     if (!req.user)
     {
       return res.render('index', { title: 'Login', page: 'login', messages: req.flash('loginMessage'), displayName: UserDisplayName(req) });
@@ -15,8 +23,10 @@ export function DisplayLoginPage(req: Request, res: Response, next: NextFunction
     return res.redirect('/contact-list');
 }
 
+// Displays register page
 export function DisplayRegisterPage(req: Request, res: Response, next: NextFunction): void
 {
+    // Checks if there is no one logged in
     if (!req.user)
     {
       return res.render('index', { title: 'Register', page: 'register', messages: req.flash('registerMessage'), displayName: UserDisplayName(req) });
@@ -25,6 +35,7 @@ export function DisplayRegisterPage(req: Request, res: Response, next: NextFunct
 }
 
 // Process Functions
+// Processes login page
 export function ProcessLoginPage(req: Request, res: Response, next: NextFunction): void
 {
     passport.authenticate('local', function(err, user, info)
@@ -60,6 +71,7 @@ export function ProcessLoginPage(req: Request, res: Response, next: NextFunction
     })(req, res, next);
 }
 
+// Processes register page
 export function ProcessRegisterPage(req: Request, res: Response, next: NextFunction): void
 {
     // instantiate a new user object
@@ -70,6 +82,7 @@ export function ProcessRegisterPage(req: Request, res: Response, next: NextFunct
         DisplayName: req.body.firstName + " " + req.body.lastName
     });
 
+    // Create a new user into the database (Mongo DB Atlas)
     User.register(newUser, req.body.password, function(err)
     {
         if(err)
@@ -92,6 +105,7 @@ export function ProcessRegisterPage(req: Request, res: Response, next: NextFunct
     });
 }
 
+// Processes the logout page
 export function ProcessLogoutPage(req: Request, res: Response, next: NextFunction): void
 {
     req.logOut();

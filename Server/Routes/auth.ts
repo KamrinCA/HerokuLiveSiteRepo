@@ -1,3 +1,9 @@
+/* Authors: Chris Lapp-Benjamin (100802074) & Kamrin Aubin (100792839)
+ * Date Completed: April 21, 2022
+ * Description: auth.ts file. Handles the routes/views for the authentication pages in the MVC pattern
+ *
+ */
+
 import express from 'express';
 const router = express.Router();
 

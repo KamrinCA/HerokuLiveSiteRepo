@@ -1,3 +1,9 @@
+/* Authors: Chris Lapp-Benjamin (100802074) & Kamrin Aubin (100792839)
+ * Date Completed: April 21, 2022
+ * Description: contact-list.ts file. Controller for handling contact-list processes and displays
+ *
+ */
+
 import express, {Request, Response, NextFunction} from 'express';
 
 import Contact from '../Models/contact';
@@ -17,11 +23,13 @@ export function DisplayContactListPage(req: Request, res: Response, next: NextFu
     });
 }
 
+// Displays Add Page
 export function DisplayAddPage(req: Request, res: Response, next: NextFunction): void
 {
     res.render('index', { title: 'Add', page: 'edit', contact: '', displayName: UserDisplayName(req) });
 }
 
+// Displays Edit page
 export function DisplayEditPage(req: Request, res: Response, next: NextFunction): void
 {
     let id = req.params.id;
@@ -41,6 +49,7 @@ export function DisplayEditPage(req: Request, res: Response, next: NextFunction)
 }
 
 // Process Functions
+// Process Adding a contact
 export function ProcessAddPage(req: Request, res: Response, next: NextFunction): void
 {
     // Instantiate a new contact to add
@@ -65,6 +74,7 @@ export function ProcessAddPage(req: Request, res: Response, next: NextFunction):
     });
 }
 
+// Processes updated a contact
 export function ProcessEditPage(req: Request, res: Response, next: NextFunction): void
 {
     let id = req.params.id;
@@ -92,6 +102,7 @@ export function ProcessEditPage(req: Request, res: Response, next: NextFunction)
     });
 }
 
+// Processes deleting a contact
 export function ProcessDeletePage(req: Request, res: Response, next: NextFunction): void
 {
     let id = req.params.id;

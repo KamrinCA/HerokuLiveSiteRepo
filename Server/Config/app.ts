@@ -1,3 +1,10 @@
+/* Authors: Chris Lapp-Benjamin (100802074) & Kamrin Aubin (100792839)
+ * Date Completed: April 21, 2022
+ * Description: app.ts Config file. Configures our node.js server to support
+ *              mongo db, passport authentication, express, etc.
+ *
+ */
+
 // modules for express server functionality
 import createError from 'http-errors';
 import express, { NextFunction } from 'express';
